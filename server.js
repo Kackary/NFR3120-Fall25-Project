@@ -63,6 +63,19 @@ app.post("/add", async (req, res) => {
   }
 });
 
+app.get("/edit/:id", async (req, res) => {
+  try {
+    const task = await Task.findById(req.params.id);
+    if (!task) {
+      return res.status(404).send("No Task Found");
+    }
+    res.render("edit", { title: "Edit Task", task });
+  } catch (err) {
+    console.error("Error loading edit page:", err);
+    res.status(500).send("Error loading edit page");
+  }
+});
+
 
 app.post("/update/:id", async (req, res) => {
   try {
@@ -73,7 +86,6 @@ app.post("/update/:id", async (req, res) => {
     res.status(500).send("Error updating task");
   }
 });
-
 
 app.post("/delete/:id", async (req, res) => {
   try {

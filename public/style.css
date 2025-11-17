@@ -86,3 +86,12 @@ button {
   border-radius: 4px;
   cursor: pointer;
 }
+
+.delete-btn {
+  background: none;
+  border: none;
+  color: red;
+  cursor: pointer;
+  padding: 0;
+}
+
