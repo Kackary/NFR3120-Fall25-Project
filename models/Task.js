@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 // Define what each "Task" document will look like in the database
 const taskSchema = new mongoose.Schema({
-  name: {
+  title: {
     type: String,
     required: true
   },
