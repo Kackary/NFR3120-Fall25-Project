@@ -1,37 +1,39 @@
-<% layout('layout') %>
+<h1 class="dashboard-title">Task Tracker Dashboard</h1>
 
-<section class="task-section">
+<div class="centered-button">
   <a href="/add" class="btn">➕ Add New Task</a>
+</div>
+<link rel="stylesheet" href="/style.css">
+<table class="task-table">
+  <thead>
+    <tr>
+      <th colspan="4">Task Tracker Dashboard</th>
+    </tr>
+    <tr>
+      <th>Task</th>
+      <th>Due Date</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
 
-  <table>
-    <thead>
+  <tbody>
+    <% if (tasks.length === 0) { %>
       <tr>
-        <th>Task</th>
-        <th>Due Date</th>
-        <th>Status</th>
-        <th>Actions</th>
+        <td colspan="4" class="empty">No tasks yet. Add one!</td>
       </tr>
-    </thead>
-    <tbody>
-      <!-- Example data until backend is connected -->
-      <tr>
-        <td>Finish Project Report</td>
-        <td>Nov 14, 2025</td>
-        <td>🕒 Pending</td>
-        <td>
-          <a href="/edit/example" class="edit">Edit</a> |
-          <a href="/delete/example" class="delete">Delete</a>
-        </td>
-      </tr>
-      <tr>
-        <td>Review Frontend Pages</td>
-        <td>Nov 15, 2025</td>
-        <td>Done</td>
-        <td>
-          <a href="/edit/example2" class="edit">Edit</a> |
-          <a href="/delete/example2" class="delete">Delete</a>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</section>
+    <% } else { %>
+      <% tasks.forEach(task => { %>
+        <tr>
+          <td><%= task.title %></td>
+          <td><%= task.dueDate || "No due date" %></td>
+          <td><%= task.completed ? "✔ Completed" : "🕒 Pending" %></td>
+          <td>
+            <a href="/edit/<%= task._id %>" class="edit">Edit</a> |
+            <a href="/delete/<%= task._id %>" class="delete">Delete</a>
+          </td>
+        </tr>
+      <% }) %>
+    <% } %>
+  </tbody>
+</table>

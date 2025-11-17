@@ -1,8 +1,15 @@
 body {
+  background: pink;
+}
+
+body {
   font-family: Arial, sans-serif;
-  margin: 40px;
   background: #f8f9fa;
   color: #333;
+}
+
+h1 {
+  margin-bottom: 15px;
 }
 
 header {
@@ -17,7 +24,7 @@ header {
 }
 
 h1 {
-  color: #007bff;
+  color: dark;
 }
 
 .btn {
@@ -30,16 +37,30 @@ h1 {
   border-radius: 5px;
 }
 
-table {
+.btn:hover {
+  background: lightblue;
+}
+
+.task-table {
   width: 100%;
   border-collapse: collapse;
   background: white;
 }
 
-table th, table td {
-  border: 1px solid #ddd;
+.task-table th,
+.task-table td {
+  border: 1px solid #ccc;
   padding: 10px;
+}
+
+.task-table th {
+  background: #ddd;
+}
+
+.empty {
   text-align: center;
+  padding: 20px;
+  color: black;
 }
 
 .edit { color: #28a745; }

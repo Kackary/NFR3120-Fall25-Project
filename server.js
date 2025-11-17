@@ -1,11 +1,17 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+const path = require("path");
 
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+app.use(express.static(path.join(__dirname, "public")));
+
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
 
 mongoose.connect("mongodb://localhost/tasktrackerDB", {
   useNewUrlParser: true,
@@ -13,38 +19,69 @@ mongoose.connect("mongodb://localhost/tasktrackerDB", {
 });
 
 const db = mongoose.connection;
-db.on("error", console.error.bind(console, "Connection error:"));
+db.on("error", (err) => {
+  console.error("Connection error:", err);
+});
 db.once("open", () => console.log("✅ Connected to MongoDB"));
 
 const Task = require("./models/Task");
 
-// create
+
+app.get("/", async (req, res) => {
+  console.log("GET / hit");
+  try {
+    const tasks = await Task.find();
+    console.log("Tasks from DB:", tasks.length);
+    res.render("index", { title: "Task Tracker", tasks });
+  } catch (err) {
+    console.error("Error in GET /:", err);
+    res.status(500).send("Error loading tasks");
+  }
+});
+
+
+app.get("/add", (req, res) => {
+  res.render("add", { title: "Add Task" });
+});
+
+
 app.post("/add", async (req, res) => {
-  const task = new Task({
-    title: req.body.title,
-    completed: false,
-    dueDate: req.body.dueDate,
-  });
-  await task.save();
-  res.send("Task added!");
+  try {
+    await Task.create({
+      title: req.body.title,
+      dueDate: req.body.dueDate,
+      completed: false,
+    });
+    res.redirect("/");
+  } catch (err) {
+    console.error("Error adding task:", err);
+    res.status(500).send("Error adding task");
+  }
 });
 
-// read
-app.get("/tasks", async (req, res) => {
-  const tasks = await Task.find();
-  res.json(tasks);
-});
 
-// update
 app.post("/update/:id", async (req, res) => {
-  await Task.findByIdAndUpdate(req.params.id, req.body);
-  res.send("Task updated!");
+  try {
+    await Task.findByIdAndUpdate(req.params.id, req.body);
+    res.redirect("/");
+  } catch (err) {
+    console.error("Error updating task:", err);
+    res.status(500).send("Error updating task");
+  }
 });
 
-// delete
+
 app.post("/delete/:id", async (req, res) => {
-  await Task.findByIdAndDelete(req.params.id);
-  res.send("Task deleted!");
+  try {
+    await Task.findByIdAndDelete(req.params.id);
+    res.redirect("/");
+  } catch (err) {
+    console.error("Error deleting task:", err);
+    res.status(500).send("Error deleting task");
+  }
 });
 
-app.listen(3000, () => console.log("Server running at http://localhost:3000"));
+// ===== START SERVER =====
+app.listen(3000, () => {
+  console.log("Server running at http://localhost:3000");
+});
