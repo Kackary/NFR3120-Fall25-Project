@@ -38,6 +38,23 @@ app.get("/", async (req, res) => {
   }
 });
 
+app.get("/login", (req, res) => {
+  res.render("login", { title: "Login" });
+});
+
+app.post("/login", (req, res) => {
+  console.log("Login attempt:", req.body);
+  res.send("Login logic is a WIP");
+});
+
+app.get("/register", (req, res) => {
+  res.render("register", { title: "register" });
+});
+
+app.post("/register", (req, res) => {
+  res.send("Register logic is a WIP");
+});
+
 app.get("/add", (req, res) => {
   res.render("add", { title: "Add Task" });
 });

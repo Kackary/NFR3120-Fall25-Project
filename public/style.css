@@ -17,6 +17,15 @@ header {
   margin-bottom: 20px;
 }
 
+.navbar {
+  background: black;
+  color: white;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .logo {
   width: 80px;
   display: block;
