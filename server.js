@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const MONGO_URL = process.env.MONGODB_URI || "mongodb://localhost/tasktrackerDB";
 const bodyParser = require("body-parser");
 const path = require("path");
 
@@ -17,11 +18,6 @@ const expressLayouts = require("express-ejs-layouts");
 app.use(expressLayouts);
 app.set("layout", "layout");
 
-mongoose.connect("mongodb://localhost/tasktrackerDB", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-
 const db = mongoose.connection;
 db.on("error", (err) => {
   console.error("Connection error:", err);
@@ -29,7 +25,6 @@ db.on("error", (err) => {
 db.once("open", () => console.log("✅ Connected to MongoDB"));
 
 const Task = require("./models/Task");
-
 
 app.get("/", async (req, res) => {
   console.log("GET / hit");
@@ -43,11 +38,9 @@ app.get("/", async (req, res) => {
   }
 });
 
-
 app.get("/add", (req, res) => {
   res.render("add", { title: "Add Task" });
 });
-
 
 app.post("/add", async (req, res) => {
   try {
@@ -76,7 +69,6 @@ app.get("/edit/:id", async (req, res) => {
   }
 });
 
-
 app.post("/update/:id", async (req, res) => {
   try {
     await Task.findByIdAndUpdate(req.params.id, req.body);
@@ -103,6 +95,9 @@ app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 
-mongoose.connect(process.env.MONGODB_URI)
-  .then(() => console.log("Connected to MongoDB"))
+mongoose.connect(MONGO_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+  .then(() => console.log("✅ Connected to MongoDB"))
   .catch(err => console.error("MongoDB connection error:", err));
