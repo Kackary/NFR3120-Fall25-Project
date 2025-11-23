@@ -11,15 +11,15 @@
 
   <nav class="navbar">
     <div class="nav-left">
-      <a href="/" class="nav-logo">TaskTracker</a>
+      <button onclick="location.href='/'" class="nav-btn nav-logo-btn">TaskTracker</button>
     </div>
 
     <div class="nav-right">
   <% if (!loggedIn) { %>
-    <a href="/login" class="nav-item">Login</a>
-    <a href="/register" class="nav-item">Register</a>
+    <button onclick="location.href='/login'" class="nav-btn">Login</button>
+    <button onclick="location.href='/register'" class="nav-btn">Register</button>
   <% } else { %>
-    <a href="/logout" class="nav-item">Logout</a>
+    <button onclick="location.href='/logout'" class="nav-btn">Logout</button>
   <% } %>
 </div>
 
