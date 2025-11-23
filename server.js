@@ -1,3 +1,4 @@
+const session = require("express-session");
 const express = require("express");
 const mongoose = require("mongoose");
 const MONGO_URL = process.env.MONGODB_URI || "mongodb://localhost/tasktrackerDB";
@@ -8,6 +9,19 @@ const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+app.use(
+  session({
+    secret: "123",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
+app.use((req, res, next) => {
+  res.locals.loggedIn = !!(req.session && req.session.userId);
+  next();
+});
 
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -43,8 +57,9 @@ app.get("/login", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  console.log("Login attempt:", req.body);
-  res.send("Login logic is a WIP");
+  const { email, password } = req.body;
+  req.session.userId = email;
+  res.redirect("/");
 });
 
 app.get("/register", (req, res) => {
@@ -52,7 +67,15 @@ app.get("/register", (req, res) => {
 });
 
 app.post("/register", (req, res) => {
-  res.send("Register logic is a WIP");
+  const { email, password } = req.body;
+  req.session.userId = email;
+  res.redirect("/");
+});
+
+app.get("/logout", (req, res) => {
+  req.session.destroy(() => {
+    res.redirect("/login");
+  });
 });
 
 app.get("/add", (req, res) => {

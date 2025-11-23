@@ -7,19 +7,25 @@
 </head>
 <body>
   <header>
-    <img src="/logo.png" alt="Team Logo" class="logo">
-    <nav class="navbar">
-      <div class="nav-left">
-        <a href="/" class="nav-logo">TaskTracker</a>
-      </div>
+  <img src="/logo.png" alt="Team Logo" class="logo">
 
-      <div class="nav-right">
-        <a href="/login" class="nav-item">Login</a>
-        <a href="/logout" class="nav-item">Logout</a>
-        <a href="/register" class="nav-item">Register</a>
-      </div>
-    </nav>
-  </header>
+  <nav class="navbar">
+    <div class="nav-left">
+      <a href="/" class="nav-logo">TaskTracker</a>
+    </div>
+
+    <div class="nav-right">
+  <% if (!loggedIn) { %>
+    <a href="/login" class="nav-item">Login</a>
+    <a href="/register" class="nav-item">Register</a>
+  <% } else { %>
+    <a href="/logout" class="nav-item">Logout</a>
+  <% } %>
+</div>
+
+  </nav>
+</header>
+
 
   <main>
     <%- body %>
